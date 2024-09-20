@@ -15,11 +15,15 @@ return {
   },
   opts = {
     filesystem = {
+      follow_current_file = {
+        enabled = true,
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',
         },
       },
     },
+    auto_clean_after_session_restore = false,
   },
 }

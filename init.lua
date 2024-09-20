@@ -230,6 +230,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'github/copilot.vim',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -387,7 +388,18 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          buffers = {
+            mappings = {
+              i = {
+                ['<c-d>'] = require('telescope.actions').delete_buffer,
+              },
+              n = {
+                ['<c-d>'] = require('telescope.actions').delete_buffer,
+              },
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -471,12 +483,85 @@ require('lazy').setup({
     -- optional for floating window border decoration
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
     },
     -- setting the keybinding for LazyGit with 'keys' is recommended in
     -- order to load the plugin when the command is run for the first time
     keys = {
       { '<leader>lg', '<cmd>LazyGit<cr>', desc = 'Open lazy git' },
     },
+    config = function()
+      require('telescope').load_extension 'lazygit'
+    end,
+  },
+
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if prefer nvim-web-devicons
+    keys = {
+      { '<leader>o', '<cmd>Oil<cr>', desc = 'Open [O]il' },
+    },
+  },
+
+  {
+    'rmagatti/goto-preview',
+    event = 'BufEnter',
+    config = true, -- necessary as per https://github.com/rmagatti/goto-preview/issues/88
+    default_mappings = true,
+  },
+
+  {
+    'rmagatti/auto-session',
+    lazy = false,
+    opts = {
+      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
+      -- log_level = 'debug',
+    },
+    config = function()
+      require('auto-session').setup {
+        pre_save_cmds = { 'Neotree close' },
+        save_extra_cmds = {
+          'Neotree show',
+        },
+      }
+    end,
+  },
+
+  {
+    'willothy/flatten.nvim',
+    config = true,
+    opts = {
+      window = {
+        open = 'alternate',
+      },
+    },
+    lazy = false,
+    priority = 1001,
+  },
+
+  {
+    'axkirillov/easypick.nvim',
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+    },
+    keys = {
+      { '<leader>ep', '<cmd>Easypick<cr>', desc = 'Easypick' },
+    },
+    config = function()
+      local easypick = require 'easypick'
+      local get_default_branch = "git rev-parse --symbolic-full-name refs/remotes/origin/HEAD | sed 's!.*/!!'"
+      local base_branch = vim.fn.system(get_default_branch) or 'main'
+      easypick.setup {
+        pickers = {
+          {
+            name = 'changed_files',
+            command = 'git diff --name-only $(git merge-base HEAD ' .. base_branch .. ' )',
+            previewer = easypick.previewers.branch_diff { base_branch = base_branch },
+          },
+        },
+      }
+    end,
   },
 
   -- LSP Plugins
@@ -648,9 +733,9 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        gopls = {},
+        pyright = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -689,6 +774,15 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'rust-analyzer', -- Used for Rust LSP
+        'goimports', -- Used to format Go code
+        'golangci-lint', -- Used for Go Linting
+        'gopls', -- Used for Go LSP
+        'delve', -- Used for Go debugging
+        'isort', -- Used to format Python code (sort imports)
+        'black', -- Used to format Python code
+        'prettierd', -- Used to format JavaScript code
+        'markdownlint', -- Used for Markdown linting
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -741,11 +835,12 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        rust = { 'rustfmt' },
+        go = { 'gofmt', 'goimports' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
+        python = { 'isort', 'black' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -817,13 +912,13 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          -- ['<C-y>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          ['<CR>'] = cmp.mapping.confirm { select = true },
+          -- ['<Tab>'] = cmp.mapping.select_next_item(),
+          -- ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
@@ -930,7 +1025,34 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'go',
+        'json',
+        'yaml',
+        'toml',
+        'typescript',
+        'javascript',
+        'css',
+        'scss',
+        'rust',
+        'python',
+        'c_sharp',
+        'cpp',
+        'cmake',
+        'dockerfile',
+        'regex',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -959,12 +1081,12 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
