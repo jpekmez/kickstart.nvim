@@ -437,6 +437,22 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'akinsho/toggleterm.nvim',
+    version = '*', -- You can lock to a specific version or use "latest"
+    config = function()
+      require('toggleterm').setup {
+        -- Your configuration options
+        size = 20,
+        open_mapping = [[<c-\>]],
+        direction = 'float', -- Can also be 'vertical' or 'float'
+        start_in_insert = true,
+        close_on_exit = true,
+        shell = vim.o.shell, -- Your shell of choice
+      }
+    end,
+  },
+
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
