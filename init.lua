@@ -438,6 +438,12 @@ require('lazy').setup({
   },
 
   {
+    'nvim-telescope/telescope-file-browser.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+    vim.keymap.set('n', '<space>fb', ':Telescope file_browser path=%:p:h select_buffer=true<CR>'),
+  },
+
+  {
     'akinsho/toggleterm.nvim',
     version = '*', -- You can lock to a specific version or use "latest"
     config = function()
