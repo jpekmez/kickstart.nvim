@@ -736,6 +736,7 @@ require('lazy').setup({
         gopls = {},
         pyright = {},
         rust_analyzer = {},
+        bufls = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -778,11 +779,32 @@ require('lazy').setup({
         'goimports', -- Used to format Go code
         'golangci-lint', -- Used for Go Linting
         'gopls', -- Used for Go LSP
+        'golines', -- Used for Go formatting
+        'gotests', -- Used for Go testing
+        'gofumpt', -- Used for Go formatting
         'delve', -- Used for Go debugging
         'isort', -- Used to format Python code (sort imports)
         'black', -- Used to format Python code
+        'flake8', -- Used for Python linting
         'prettierd', -- Used to format JavaScript code
         'markdownlint', -- Used for Markdown linting
+        'eslint_d', -- Used for JavaScript linting
+        'jsonlint', -- Used for JSON linting
+        'yamllint', -- Used for YAML linting
+        'htmlhint', -- Used for HTML linting
+        'stylelint', -- Used for CSS linting
+        'tflint', -- Used for Terraform linting
+        'terraform-ls', -- Used for Terraform LSP
+        'dockerls', -- Used for Dockerfile LSP
+        'hadolint', -- Used for Dockerfile linting
+        'bashls', -- Used for Bash LSP
+        'shellcheck', -- Used for Shell linting
+        'shfmt', -- Used for Shell formatting
+        'sqls', -- Used for SQL LSP
+        'sqlfmt', -- Used for SQL formatting
+        'sqlfluff', -- Used for SQL linting
+        'buf', -- Used for proto linting
+        'bufls', -- Used for proto LSP
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -829,18 +851,30 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 500,
+          timeout_ms = 1000,
           lsp_format = lsp_format_opt,
         }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
         rust = { 'rustfmt' },
-        go = { 'gofmt', 'goimports' },
+        go = { 'gofumpt', 'goimports' },
         -- Conform can also run multiple formatters sequentially
         python = { 'isort', 'black' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        markdown = { 'markdownlint' },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        yaml = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        svelte = { 'prettierd', 'prettier', stop_after_first = true },
+        dockerfile = { 'hadolint' },
+        bash = { 'shellcheck', 'shfmt' },
+        sql = { 'sqlfmt' },
+        terraform = { 'terraform', args = { 'fmt' } },
+        proto = { 'buf', args = { 'format' } },
       },
     },
   },

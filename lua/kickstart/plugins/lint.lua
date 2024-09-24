@@ -7,6 +7,21 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        javascript = { 'eslint_d' },
+        typescript = { 'eslint_d' },
+        svelte = { 'eslint_d' },
+        python = { 'flake8' },
+        json = { 'jsonlint' },
+        yaml = { 'yamllint' },
+        dockerfile = { 'hadolint' },
+        rust = { 'cargo' },
+        go = { 'golangcilint' },
+        html = { 'htmlhint' },
+        css = { 'stylelint' },
+        terraform = { 'tflint' },
+        bash = { 'shellcheck' },
+        sql = { 'sqlfluff' },
+        proto = { 'buf_lint' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
