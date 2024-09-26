@@ -5,6 +5,13 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+
+      local function find_flake8_config()
+        local cwd = vim.fn.getcwd()
+        local flake8_config = vim.fn.findfile('.flake8', cwd .. ';')
+        return flake8_config ~= '' and flake8_config or nil
+      end
+
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
         javascript = { 'eslint_d' },
@@ -24,6 +31,11 @@ return {
         proto = { 'buf_lint' },
       }
 
+      -- Configure flake8 to use the project's .flake8 config file
+      lint.linters.flake8.args = function()
+        local flake8_config = find_flake8_config()
+        return flake8_config and { '--config', flake8_config } or {}
+      end
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
       -- lint.linters_by_ft = lint.linters_by_ft or {}

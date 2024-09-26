@@ -795,7 +795,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
+        svelte = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -855,6 +855,7 @@ require('lazy').setup({
         'sqlfluff', -- Used for SQL linting
         'buf', -- Used for proto linting
         'bufls', -- Used for proto LSP
+        'svelte-language-server', -- Used for Svelte LSP
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
