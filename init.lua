@@ -818,7 +818,13 @@ require('lazy').setup({
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
+      require('mason').setup {
+        registries = {
+          'github:mason-org/mason-registry',
+          -- tmp registry waiting for PR to be merged
+          'github:syndim/mason-registry',
+        },
+      }
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
@@ -855,7 +861,9 @@ require('lazy').setup({
         'sqlfluff', -- Used for SQL linting
         'buf', -- Used for proto linting
         'bufls', -- Used for proto LSP
-        'svelte-language-server', -- Used for Svelte LSP
+        'svelte-language-server', -- Used for Svelte LSP,
+        'roslyn', -- Used for C# LSP
+        'csharpier', -- Used for C# formatting
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -872,6 +880,14 @@ require('lazy').setup({
         },
       }
     end,
+  },
+
+  {
+    'seblj/roslyn.nvim',
+    ft = 'cs',
+    opts = {
+      -- your configuration comes here; leave empty for default settings
+    },
   },
 
   { -- Autoformat
@@ -926,6 +942,7 @@ require('lazy').setup({
         sql = { 'sqlfmt' },
         terraform = { 'terraform', args = { 'fmt' } },
         proto = { 'buf', args = { 'format' } },
+        cs = { 'csharpier' },
       },
     },
   },
