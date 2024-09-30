@@ -843,6 +843,7 @@ require('lazy').setup({
         'black', -- Used to format Python code
         'flake8', -- Used for Python linting
         'prettierd', -- Used to format JavaScript code
+        'prettier', -- Used to format JavaScript code
         'markdownlint', -- Used for Markdown linting
         'eslint_d', -- Used for JavaScript linting
         'jsonlint', -- Used for JSON linting
