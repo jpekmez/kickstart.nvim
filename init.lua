@@ -585,6 +585,24 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function()
+      require('bufferline').setup {
+        options = {
+          separator_style = 'slant',
+        },
+        highlights = require('nord').bufferline.highlights {
+          italic = true,
+          bold = true,
+          fill = '#181c24',
+        },
+      }
+    end,
+  },
+
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
