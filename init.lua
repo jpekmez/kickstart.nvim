@@ -252,7 +252,7 @@ require('lazy').setup({
     event = 'VeryLazy',
     config = function()
       require('chatgpt').setup {
-        api_key_cmd = 'op read op://Employee/OpenAI nvim key/password --no-newline',
+        api_key_cmd = 'op read "op://Employee/OpenAI nvim key/password" --no-newline',
       }
     end,
     dependencies = {
@@ -726,6 +726,14 @@ require('lazy').setup({
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+
+          -- Show the hover information for the word under your cursor.
+          -- This is useful for seeing documentation, types, etc.
+          map('K', vim.lsp.buf.hover, '[K]ind of word')
+
+          -- Show the signature help for the function call under your cursor.
+          -- This is useful for seeing the types of the arguments a function takes.
+          map('<C-k>', vim.lsp.buf.signature_help, '[K]ind of function')
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
