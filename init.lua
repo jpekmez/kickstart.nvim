@@ -251,8 +251,19 @@ require('lazy').setup({
     'jackMort/ChatGPT.nvim',
     event = 'VeryLazy',
     config = function()
+      local function get_api_key()
+        -- if vim.fn.executable 'op' == 1 then
+        --   local handle = io.popen 'op read "op://Employee/OpenAI nvim key/password" --no-newline'
+        --   if handle then
+        --     local result = handle:read '*a'
+        --     handle:close()
+        --     return result
+        --   end
+        -- end
+        return vim.fn.getenv 'OPENAI_API_KEY'
+      end
       require('chatgpt').setup {
-        api_key_cmd = 'op read "op://Employee/OpenAI nvim key/password" --no-newline',
+        api_key = get_api_key(),
       }
     end,
     dependencies = {
