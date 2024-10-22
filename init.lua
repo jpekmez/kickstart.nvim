@@ -299,6 +299,17 @@ require('lazy').setup({
     },
   },
 
+  {
+    'almo7aya/openingh.nvim',
+    config = function()
+      require('openingh').setup {
+        vim.keymap.set('n', '<leader>gr', ':OpenInGHRepo <CR>', { desc = 'Open [G]it [R]epository' }),
+        vim.keymap.set('n', '<leader>gf', ':OpenInGHFile <CR>', { desc = 'Open [G]it [F]ile' }),
+        vim.keymap.set('v', '<leader>gf', ':OpenInGHFileLine <CR>', { desc = 'Open [G]it [F]ile [L]ine' }),
+      }
+    end,
+  },
+
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -749,6 +760,8 @@ require('lazy').setup({
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+          -- SHow commit that introduced the current line
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
