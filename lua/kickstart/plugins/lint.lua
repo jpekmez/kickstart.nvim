@@ -21,7 +21,6 @@ return {
         json = { 'jsonlint' },
         yaml = { 'yamllint' },
         dockerfile = { 'hadolint' },
-        rust = { 'cargo' },
         go = { 'golangcilint' },
         html = { 'htmlhint' },
         css = { 'stylelint' },
