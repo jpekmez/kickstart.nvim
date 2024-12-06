@@ -206,6 +206,13 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Custom keybinds
+vim.keymap.set('i', '<C-a>', '<C-o>^', { desc = 'Move to beginning of line' })
+vim.keymap.set('i', '<C-e>', '<C-o>$', { desc = 'Move to end of line' })
+vim.keymap.set('i', '<C-k>', '<C-o>D', { desc = 'Delete to end of line' })
+vim.keymap.set('n', '<C-a>', '^', { desc = 'Move to beginning of line' })
+vim.keymap.set('n', '<C-e>', '$', { desc = 'Move to end of line' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
