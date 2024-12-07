@@ -254,32 +254,32 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'github/copilot.vim',
-  {
-    'jackMort/ChatGPT.nvim',
-    event = 'VeryLazy',
-    config = function()
-      local function get_api_key()
-        -- if vim.fn.executable 'op' == 1 then
-        --   local handle = io.popen 'op read "op://Employee/OpenAI nvim key/password" --no-newline'
-        --   if handle then
-        --     local result = handle:read '*a'
-        --     handle:close()
-        --     return result
-        --   end
-        -- end
-        return vim.fn.getenv 'OPENAI_API_KEY'
-      end
-      require('chatgpt').setup {
-        api_key = get_api_key(),
-      }
-    end,
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-lua/plenary.nvim',
-      'folke/trouble.nvim',
-      'nvim-telescope/telescope.nvim',
-    },
-  },
+  -- {
+  --   'jackMort/ChatGPT.nvim',
+  --   event = 'VeryLazy',
+  --   config = function()
+  --     local function get_api_key()
+  --       -- if vim.fn.executable 'op' == 1 then
+  --       --   local handle = io.popen 'op read "op://Employee/OpenAI nvim key/password" --no-newline'
+  --       --   if handle then
+  --       --     local result = handle:read '*a'
+  --       --     handle:close()
+  --       --     return result
+  --       --   end
+  --       -- end
+  --       return vim.fn.getenv 'OPENAI_API_KEY'
+  --     end
+  --     require('chatgpt').setup {
+  --       api_key = get_api_key(),
+  --     }
+  --   end,
+  --   dependencies = {
+  --     'MunifTanjim/nui.nvim',
+  --     'nvim-lua/plenary.nvim',
+  --     'folke/trouble.nvim',
+  --     'nvim-telescope/telescope.nvim',
+  --   },
+  -- },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -866,7 +866,6 @@ require('lazy').setup({
           end,
         },
         rust_analyzer = {},
-        bufls = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -941,7 +940,6 @@ require('lazy').setup({
         'sqlfmt', -- Used for SQL formatting
         'sqlfluff', -- Used for SQL linting
         'buf', -- Used for proto linting
-        'bufls', -- Used for proto LSP
         'svelte-language-server', -- Used for Svelte LSP,
         'roslyn', -- Used for C# LSP
         'csharpier', -- Used for C# formatting
@@ -1005,6 +1003,7 @@ require('lazy').setup({
       },
     },
     opts = {
+      undojoin = true,
       notify_on_error = false,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
@@ -1162,6 +1161,19 @@ require('lazy').setup({
         },
       }
     end,
+  },
+
+  -- auto-save
+  {
+    'okuuva/auto-save.nvim',
+    keys = {
+      { '<leader>n', '<cmd>ASToggle<CR>', desc = 'Toggle auto-save' },
+    },
+    cmd = 'ASToggle',
+    event = { 'InsertLeave', 'TextChanged' },
+    opts = {
+      debounce_delay = 250,
+    },
   },
 
   -- tests and coverage
