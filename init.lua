@@ -844,6 +844,12 @@ require('lazy').setup({
           return path.join(venv, 'bin', 'python')
         end
 
+        -- Find and use virtualenv in workspace directory.
+        local match = vim.fn.glob(path.join(workspace, '.venv'))
+        if match ~= '' then
+          return path.join(workspace, '.venv', 'bin', 'python')
+        end
+
         -- Fallback to system Python.
         return exepath 'python3' or exepath 'python' or 'python'
       end
