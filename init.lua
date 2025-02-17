@@ -254,32 +254,18 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'github/copilot.vim',
-  -- {
-  --   'jackMort/ChatGPT.nvim',
-  --   event = 'VeryLazy',
-  --   config = function()
-  --     local function get_api_key()
-  --       -- if vim.fn.executable 'op' == 1 then
-  --       --   local handle = io.popen 'op read "op://Employee/OpenAI nvim key/password" --no-newline'
-  --       --   if handle then
-  --       --     local result = handle:read '*a'
-  --       --     handle:close()
-  --       --     return result
-  --       --   end
-  --       -- end
-  --       return vim.fn.getenv 'OPENAI_API_KEY'
-  --     end
-  --     require('chatgpt').setup {
-  --       api_key = get_api_key(),
-  --     }
-  --   end,
-  --   dependencies = {
-  --     'MunifTanjim/nui.nvim',
-  --     'nvim-lua/plenary.nvim',
-  --     'folke/trouble.nvim',
-  --     'nvim-telescope/telescope.nvim',
-  --   },
-  -- },
+  {
+    'yetone/avante.nvim',
+    event = 'VeryLazy',
+    lazy = false,
+    version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+    opts = {
+      provider = 'cohere',
+      cohere = {
+        model = 'command-r7b-12-2024',
+      },
+    },
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
